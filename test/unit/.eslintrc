@@ -1,4 +1,11 @@
 {
+  "rules": {
+    // allow devDependencies during tests
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": true,
+      "optionalDependencies": false
+    }]
+  },
   "env": {
     "mocha": true
   },
