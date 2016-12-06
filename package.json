@@ -10,7 +10,8 @@
     "unit": "karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "deploy": "npm run build && mv dist/index.html dist/200.html && surge dist snaildisk.surge.sh"
   },
   "dependencies": {
     "d3": "^4.4.0",
@@ -71,6 +72,7 @@
     "shelljs": "^0.7.4",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
+    "surge": "^0.18.0",
     "url-loader": "^0.5.7",
     "vue-loader": "^10.0.0",
     "vue-style-loader": "^1.0.0",
