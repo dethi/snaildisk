@@ -11,12 +11,14 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "deploy": "npm run build && mv dist/index.html dist/200.html && surge dist snaildisk.surge.sh"
+    "deploy": "surge dist snaildisk.surge.sh"
   },
   "dependencies": {
     "d3": "^4.4.0",
     "dropbox": "^2.5.0",
+    "lovefield": "^2.1.10",
     "materialize-css": "^0.97.8",
+    "query-string": "^4.2.3",
     "vue": "^2.1.0",
     "vue-router": "^2.1.1",
     "vuex": "^2.0.0"
