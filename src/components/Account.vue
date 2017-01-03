@@ -1,47 +1,45 @@
 <template>
   <div>
-    <p>Hello {{ firstname }}!</p>
-    <p>Usage: {{ usedSpace | size }} / {{ allocatedSpace | size}} ({{ spaceUsage }}%)</p>
-  </div>
+      <p class="title is-3">
+        <span>Welcome {{ firstname }}</span>
+        <span class="icon is-medium">
+          <i class="fa fa-hand-peace-o"></i>
+        </span>
+      </p>
+      <p class="subtitle is-5">Here are some statistics for you:</p>
+
+      <hr>
+
+      <nav class="level">
+        <div class="level-item has-text-centered">
+          <p class="heading">Used Space</p>
+          <p class="title">{{ usedSpace | size }}</p>
+        </div>
+        <div class="level-item has-text-centered">
+          <p class="heading">Allocated Space</p>
+          <p class="title">{{ allocatedSpace | size }}</p>
+        </div>
+        <div class="level-item has-text-centered">
+          <p class="heading">Usage</p>
+          <p class="title">{{ spaceUsage }} %</p>
+        </div>
+      </nav>
+
+    </div>
 </template>
 
 <script>
-import Dropbox from 'dropbox';
+import { mapState, mapGetters } from 'vuex';
 
-const dbx = new Dropbox();
 
 export default {
-  props: {
-    accessToken: {
-      type: String,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      firstname: '',
-
-      usedSpace: 0,
-      allocatedSpace: 0,
-    };
-  },
-  created() {
-    dbx.setAccessToken(this.accessToken);
-  },
-  async mounted() {
-    let res = await dbx.usersGetCurrentAccount();
-    this.firstname = res.name.given_name;
-
-    res = await dbx.usersGetSpaceUsage();
-    this.usedSpace = res.used;
-    this.allocatedSpace = res.allocation.allocated;
-  },
   computed: {
-    spaceUsage() {
-      return (this.allocatedSpace > 0)
-        ? Math.round((this.usedSpace / this.allocatedSpace) * 100)
-        : 0;
-    },
+    ...mapState({
+      firstname: state => state.account.firstname,
+      usedSpace: state => state.space.used,
+      allocatedSpace: state => state.space.allocated,
+    }),
+    ...mapGetters(['spaceUsage']),
   },
 };
 </script>
