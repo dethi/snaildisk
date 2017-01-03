@@ -25,7 +25,15 @@ module.exports = {
       'vue': 'never'
     }],
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    // allow only args '_' to be unused
+    'no-unused-vars': ['error', {
+      'argsIgnorePattern': '^_$'
+    }],
+    // allow mutation of props
+    'no-param-reassign': ['error', {
+      'props': false
+    }]
   },
   'env': {
     // allow browser global variables
