@@ -1,38 +1,34 @@
 <template>
-  <p><a :href="getAuthenticationUrl()">Login to Dropbox</a></p>
+  <div>
+    <a class="button is-inverted is-outlined is-info is-large" :href="getAuthenticationUrl()">
+      <span class="icon is-medium">
+        <i class="fa fa-dropbox"></i>
+      </span>
+      <span>Login with Dropbox</span>
+    </a>
+  </div>
 </template>
 
 <script>
-import Dropbox from 'dropbox';
 import { parse as parseQueryString } from 'query-string';
+import API from '../api';
 
-
-const dbx = new Dropbox({ clientId: 'tq8yauz5y98cz9z' });
 
 export default {
   mounted() {
-    const accessToken = this.getAccessToken();
-    if (accessToken) {
+    const token = parseQueryString(this.$route.hash).access_token;
+    API.setAccessToken(token);
+
+    // Check if user is authenticated
+    if (API.isAuthenticated()) {
       this.$router.replace('/dashboard');
-    }
-    if (!accessToken && this.$route.path === '/auth') {
+    } else {
       this.$router.replace('/');
     }
   },
   methods: {
     getAuthenticationUrl() {
-      return dbx.getAuthenticationUrl('http://localhost:8080/auth');
-    },
-    getAccessToken() {
-      let accessToken = window.sessionStorage.getItem('dropboxAccessToken');
-      if (!accessToken) {
-        // Try to load access token from the URL
-        accessToken = parseQueryString(this.$route.hash).access_token;
-        if (accessToken) {
-          window.sessionStorage.setItem('dropboxAccessToken', accessToken);
-        }
-      }
-      return accessToken || '';
+      return API.getAuthenticationUrl(`${process.env.URL}/auth`);
     },
   },
 };
