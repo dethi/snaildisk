@@ -50,40 +50,30 @@
           </p>
         </div>
       </template>
-      <!-- <template v-else>
+      <template v-else>
         <div class="column">
         </div>
 
         <div class="column">
-          <nav class="panel">
-            <a class="panel-block">
+          <div class="panel">
+            <a class="panel-block" v-if="cwd" @click="prevCwd">
               <span class="panel-icon">
-                <i class="fa fa-folder"></i>
+                <i class="fa fa-angle-left"></i>
               </span>
-              Images
+              ..
             </a>
-            <a class="panel-block">
+            <a class="panel-block" v-for="row in rows" @click="changeCwd(row)">
               <span class="panel-icon">
-                <i class="fa fa-file"></i>
+                <i v-if="row.type === 'folder'" class="fa fa-folder"></i>
+                <i v-else class="fa fa-file"></i>
               </span>
-              my-file.css
-            </a>
-            <a class="panel-block">
-              <span class="panel-icon">
-                <i class="fa fa-file"></i>
-              </span>
-              my-file2.css
+              {{ row.name }}
 
-              <span class="is-pulled-right">7 Go</span>
+              <span class="is-pulled-right">{{ row.size | size }}</span>
             </a>
-            <div class="panel-block">
-              <button class="button is-primary is-outlined is-fullwidth">
-                Show more
-              </button>
-            </div>
-          </nav>
+          </div>
         </div>
-      </template> -->
+      </template>
     </div>
   </div>
 </template>
@@ -104,6 +94,9 @@ export default {
     return {
       isLoading: true,
       loadingMessage: '',
+
+      cwd: null,
+      rows: [],
     };
   },
   created() {
@@ -117,6 +110,7 @@ export default {
   mounted() {
     DB.prepareDB().then(() => {
       this.isLoading = false;
+      this.cwd = '';
     });
   },
   computed: {
@@ -137,8 +131,19 @@ export default {
         NProgress.set(n);
       }
     },
+    async cwd(path) {
+      this.rows = await DB.list(path);
+    },
   },
   methods: {
+    changeCwd(row) {
+      if (row.type === 'folder') {
+        this.cwd = `${row.path}/${row.name}`;
+      }
+    },
+    prevCwd() {
+      this.cwd = this.cwd.substring(0, this.cwd.lastIndexOf('/'));
+    },
     start() {
       NProgress.start();
       this.isLoading = true;

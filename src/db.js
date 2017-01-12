@@ -46,6 +46,11 @@ class DB {
       .from(this.entriesT)
       .groupBy(this.entriesT.type);
 
+    this.listQ = this.db.select()
+      .from(this.entriesT)
+      .where(this.entriesT.path.eq(lf.bind(0)))
+      .orderBy(this.entriesT.size, lf.Order.DESC);
+
     this.loaded = true;
   }
 
@@ -96,6 +101,10 @@ class DB {
   async computeSize(path) {
     const res = await this.computeSizeQ.bind([path]).exec();
     return res[0]['SUM(size)'];
+  }
+
+  list(path) {
+    return this.listQ.bind([path]).exec();
   }
 }
 
