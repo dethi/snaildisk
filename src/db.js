@@ -106,6 +106,14 @@ class DB {
   list(path) {
     return this.listQ.bind([path]).exec();
   }
+
+  async count() {
+    const res = await this.countQ.exec();
+    return res.reduce((obj, cur) => {
+      obj[cur.type] = cur['COUNT(type)'];
+      return obj;
+    }, {});
+  }
 }
 
 export default new DB();

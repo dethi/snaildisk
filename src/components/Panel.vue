@@ -69,7 +69,9 @@
               </span>
               {{ row.name }}
 
-              <span class="is-pulled-right">{{ row.size | size }}</span>
+              <span class="is-pulled-right">
+                {{ row.size | size }} - {{ relativeSize(row.size) }} %
+              </span>
             </a>
           </div>
         </div>
@@ -111,12 +113,22 @@ export default {
     DB.prepareDB().then(() => {
       this.isLoading = false;
       this.cwd = '';
+
+      DB.count().then((counter) => {
+        if (counter.file) {
+          this.$store.commit(types.INC_FILE_COUNTER, counter.file);
+        }
+        if (counter.folder) {
+          this.$store.commit(types.INC_FOLDER_COUNTER, counter.folder);
+        }
+      });
     });
   },
   computed: {
     ...mapState({
       nbFiles: state => state.counters.files,
       nbFolders: state => state.counters.folders,
+      usedSpace: state => state.space.used,
 
       loadingProgress(state) {
         return (state.space.used > 0)
@@ -124,6 +136,12 @@ export default {
           : 0;
       },
     }),
+
+    cwdSize() {
+      return (this.cwd === '')
+        ? this.usedSpace
+        : this.rows.reduce((acc, row) => acc + row.size, 0);
+    },
   },
   watch: {
     loadingProgress(n) {
@@ -143,6 +161,11 @@ export default {
     },
     prevCwd() {
       this.cwd = this.cwd.substring(0, this.cwd.lastIndexOf('/'));
+    },
+    relativeSize(size) {
+      return (this.cwdSize > 0)
+        ? Math.round((size / this.cwdSize) * 100)
+        : 0;
     },
     start() {
       NProgress.start();
