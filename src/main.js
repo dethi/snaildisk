@@ -1,6 +1,4 @@
 import Vue from 'vue';
-import 'bulma/bulma.sass';
-import 'font-awesome/scss/font-awesome.scss';
 
 import App from './App';
 import router from './router';

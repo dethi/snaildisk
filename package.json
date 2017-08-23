@@ -11,7 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "bulma": "^0.5.1",
+    "bulma": "^0.2.3",
     "d3": "^4.10.0",
     "dropbox": "^2.5.7",
     "font-awesome": "^4.7.0",
@@ -77,9 +77,5 @@
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
