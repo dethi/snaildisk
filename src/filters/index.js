@@ -12,5 +12,5 @@ export default {
       u += 1;
     } while (Math.abs(size) >= 1024 && u < units.length - 1);
     return `${size.toFixed(1)} ${units[u]}`;
-  },
+  }
 };

@@ -1,6 +1,5 @@
 import Dropbox from 'dropbox';
 
-
 const SESSION_ACCESS_TOKEN = 'dropbox_access_token';
 
 class API {
@@ -32,7 +31,7 @@ class API {
       email: user.email,
       firstname: user.name.given_name,
       lastname: user.name.surname,
-      initials: user.name.abbreviated_name,
+      initials: user.name.abbreviated_name
     };
   }
 
@@ -40,7 +39,7 @@ class API {
     const space = await this.dbx.usersGetSpaceUsage();
     return {
       used: space.used,
-      allocated: space.allocation.allocated,
+      allocated: space.allocation.allocated
     };
   }
 
@@ -54,5 +53,5 @@ class API {
 
 export default new API({
   clientId: process.env.DROPBOX_CLIENT_ID,
-  accessToken: window.sessionStorage.getItem(SESSION_ACCESS_TOKEN),
+  accessToken: window.sessionStorage.getItem(SESSION_ACCESS_TOKEN)
 });
