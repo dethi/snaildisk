@@ -2,9 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Login from '../components/Login';
-import Dashboard from '../components/Dashboard';
 import Welcome from '../components/Welcome';
-import NotFound from '../components/NotFound';
+
+const Dashboard = () => import('../components/Dashboard');
+const NotFound = () => import('../components/NotFound');
 
 Vue.use(Router);
 
