@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <a class="button is-inverted is-outlined is-info is-large" :href="getAuthenticationUrl()">
-      <span class="icon is-medium">
-        <i class="fa fa-dropbox"></i>
-      </span>
-      <span>Login with Dropbox</span>
-    </a>
-  </div>
+  <a class="button is-outlined is-info is-large" :href="getAuthenticationUrl()">
+    <span class="icon is-medium">
+      <i class="fa fa-dropbox"></i>
+    </span>
+    <span>Login with Dropbox</span>
+  </a>
 </template>
 
 <script>
