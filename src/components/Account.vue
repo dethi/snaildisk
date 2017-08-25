@@ -12,16 +12,22 @@
 
       <nav class="level">
         <div class="level-item has-text-centered">
-          <p class="heading">Used Space</p>
-          <p class="title">{{ usedSpace | size }}</p>
+          <div>
+            <p class="heading">Used Space</p>
+            <p class="title">{{ usedSpace | size }}</p>
+          </div>
         </div>
         <div class="level-item has-text-centered">
-          <p class="heading">Allocated Space</p>
-          <p class="title">{{ allocatedSpace | size }}</p>
+          <div>
+            <p class="heading">Allocated Space</p>
+            <p class="title">{{ allocatedSpace | size }}</p>
+          </div>
         </div>
         <div class="level-item has-text-centered">
-          <p class="heading">Usage</p>
-          <p class="title">{{ spaceUsage }} %</p>
+          <div>
+            <p class="heading">Usage</p>
+            <p class="title">{{ spaceUsage }} %</p>
+          </div>
         </div>
       </nav>
 

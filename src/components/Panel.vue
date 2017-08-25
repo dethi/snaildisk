@@ -3,7 +3,7 @@
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <div class="control is-grouped">
+          <div class="field is-grouped">
             <div class="control">
               <button class="button is-primary" :class="{'is-loading': isLoading}" @click="scanAllFolder">
                 <span class="icon">
@@ -14,7 +14,7 @@
             </div>
 
             <div class="control">
-              <button class="button is-danger" :class="{'is-disabled': !isLoading}" @click="stop">
+              <button class="button is-danger" :disabled="!isLoading" @click="stop">
                 <span class="icon">
                   <i class="fa fa-ban"></i>
                 </span>
@@ -55,25 +55,28 @@
         </div>
 
         <div class="column">
-          <div class="panel">
-            <a class="panel-block" v-if="cwd" @click="prevCwd">
-              <span class="panel-icon">
-                <i class="fa fa-angle-left"></i>
-              </span>
-              ..
-            </a>
-            <a class="panel-block" v-for="row in rows" @click="changeCwd(row)">
-              <span class="panel-icon">
-                <i v-if="row.type === 'folder'" class="fa fa-folder"></i>
-                <i v-else class="fa fa-file"></i>
-              </span>
-              {{ row.name }}
-
-              <span class="is-pulled-right">
-                {{ row.size | size }} - {{ relativeSize(row.size) }} %
-              </span>
-            </a>
-          </div>
+          <table class="table is-narrow is-fullwidth">
+            <tbody>
+              <tr v-if="cwd" @click="prevCwd">
+                <th><i class="fa fa-angle-left"></i></th>
+                <td>..</td>
+                <td></td>
+              </tr>
+              <tr v-for="row in limitedRows" @click="changeCwd(row)">
+                <th>
+                  <i v-if="row.type === 'folder'" class="fa fa-folder"></i>
+                  <i v-else class="fa fa-file"></i>
+                </th>
+                <td>{{ row.name }}</td>
+                <td class="has-text-right">{{ row.size | size }} - {{ relativeSize(row.size) }} %</td>
+              </tr>
+              <tr v-if="rows.length !== limitedRows.length">
+                <th></th>
+                <td>...smaller objects...</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </template>
     </div>
@@ -142,6 +145,10 @@ export default {
         ? this.usedSpace
         : this.rows.reduce((acc, row) => acc + row.size, 0);
     },
+
+    limitedRows() {
+      return this.rows.slice(0, 15);
+    }
   },
   watch: {
     loadingProgress(n) {
@@ -213,8 +220,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .has-padding {
   padding: 40px 20px;
+}
+
+tr {
+  cursor: pointer;
 }
 </style>
