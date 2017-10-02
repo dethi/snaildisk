@@ -9,6 +9,9 @@
 # production
 /build
 
+# debugging
+/.vscode/chrome
+
 # misc
 .DS_Store
 .env.local
