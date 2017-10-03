@@ -1,7 +1,6 @@
 import React from 'react';
 
 import LoginButton from './components/LoginButton';
-
 import brandIcon from './assets/brand-icon.png';
 
 export default function Landing() {
