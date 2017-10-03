@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
+import Landing from './Landing';
 
 class App extends Component {
   render() {
-    return (
-      <div className="App">
-        <h1 className="title is-1">Test</h1>
-      </div>
-    );
+    return <Landing />;
   }
 }
 
