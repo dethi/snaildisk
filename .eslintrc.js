@@ -55,6 +55,7 @@ module.exports = {
       }
     ],
     // allow await in loop
-    'no-await-in-loop': 'off'
+    'no-await-in-loop': 'off',
+    'class-methods-use-this': ['error', { exceptMethods: ['cursor'] }]
   }
 };
