@@ -1,10 +1,19 @@
 import Dropbox from 'dropbox';
 
-const SESSION_ACCESS_TOKEN = 'dropbox_access_token';
+const ACCESS_TOKEN_KEY = 'dropbox_access_token';
+const CURSOR_KEY = 'dropbox_cursor';
 
 class API {
   constructor(options) {
     this.dbx = new Dropbox(options);
+  }
+
+  get cursor() {
+    return window.localStorage.getItem(CURSOR_KEY) || null;
+  }
+
+  set cursor(newCursor) {
+    window.localStorage.setItem(CURSOR_KEY, newCursor);
   }
 
   isAuthenticated() {
@@ -20,7 +29,7 @@ class API {
       return false;
     }
 
-    window.sessionStorage.setItem(SESSION_ACCESS_TOKEN, token);
+    window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
     this.dbx.setAccessToken(token);
     return true;
   }
@@ -43,15 +52,21 @@ class API {
     };
   }
 
-  listEntries(cursor) {
+  async listEntries() {
+    let res = null;
+    const cursor = this.cursor;
     if (!cursor) {
-      return this.dbx.filesListFolder({ path: '', recursive: true });
+      res = await this.dbx.filesListFolder({ path: '', recursive: true });
+    } else {
+      res = await this.dbx.filesListFolderContinue({ cursor });
     }
-    return this.dbx.filesListFolderContinue({ cursor });
+
+    this.cursor = res.cursor;
+    return res;
   }
 }
 
 export default new API({
   clientId: process.env.DROPBOX_CLIENT_ID,
-  accessToken: window.sessionStorage.getItem(SESSION_ACCESS_TOKEN)
+  accessToken: window.localStorage.getItem(ACCESS_TOKEN_KEY)
 });
