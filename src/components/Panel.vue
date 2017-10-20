@@ -52,9 +52,6 @@
       </template>
       <template v-else>
         <div class="column">
-        </div>
-
-        <div class="column">
           <table class="table is-narrow is-fullwidth">
             <tbody>
               <tr v-if="cwd" @click="prevCwd">
@@ -93,7 +90,6 @@ import DB from '../db';
 
 import * as types from '../store/mutation-types';
 
-
 export default {
   data() {
     return {
@@ -101,13 +97,13 @@ export default {
       loadingMessage: '',
 
       cwd: null,
-      rows: [],
+      rows: []
     };
   },
   created() {
     NProgress.configure({
       minimum: 0,
-      trickle: false,
+      trickle: false
     });
 
     this.loadingMessage = 'Waking up the dwarves...';
@@ -117,7 +113,7 @@ export default {
       this.isLoading = false;
       this.cwd = '';
 
-      DB.count().then((counter) => {
+      DB.count().then(counter => {
         if (counter.file) {
           this.$store.commit(types.INC_FILE_COUNTER, counter.file);
         }
@@ -134,14 +130,14 @@ export default {
       usedSpace: state => state.space.used,
 
       loadingProgress(state) {
-        return (state.space.used > 0)
+        return state.space.used > 0
           ? state.counters.size / state.space.used
           : 0;
-      },
+      }
     }),
 
     cwdSize() {
-      return (this.cwd === '')
+      return this.cwd === ''
         ? this.usedSpace
         : this.rows.reduce((acc, row) => acc + row.size, 0);
     },
@@ -158,7 +154,7 @@ export default {
     },
     async cwd(path) {
       this.rows = await DB.list(path);
-    },
+    }
   },
   methods: {
     changeCwd(row) {
@@ -170,9 +166,7 @@ export default {
       this.cwd = this.cwd.substring(0, this.cwd.lastIndexOf('/'));
     },
     relativeSize(size) {
-      return (this.cwdSize > 0)
-        ? Math.round((size / this.cwdSize) * 100)
-        : 0;
+      return this.cwdSize > 0 ? Math.round(size / this.cwdSize * 100) : 0;
     },
     start() {
       NProgress.start();
@@ -183,40 +177,58 @@ export default {
       this.isLoading = false;
     },
     async scanAllFolder() {
-      let cursor = '';
-
       this.loadingMessage = 'The dwarves collects the data...';
       this.start();
-      do {
-        const res = await API.listEntries(cursor);
-        if (!this.isLoading) {
-          return;
-        }
 
-        await DB.insertEntries(res.entries);
+      let hasMore = true;
+      while (hasMore && this.isLoading) {
+        const res = await API.listEntries();
+        await DB.insertEntries(
+          res.entries.filter(e => e['.tag'] !== 'deleted')
+        );
+        await DB.removeEntries(
+          res.entries.filter(e => e['.tag'] === 'deleted')
+        );
 
-        cursor = res.has_more ? res.cursor : '';
-        const counters = res.entries.reduce((obj, e) => {
-          if (e['.tag'] === 'file') {
-            obj.files += 1;
-            obj.size += e.size;
-          } else if (e['.tag'] === 'folder') {
-            obj.folders += 1;
-          }
-          return obj;
-        }, { files: 0, folders: 0, size: 0 });
+        hasMore = res.has_more;
+        const counters = res.entries.reduce(
+          (obj, e) => {
+            if (e['.tag'] === 'file') {
+              obj.files += 1;
+              obj.size += e.size;
+            } else if (e['.tag'] === 'folder') {
+              obj.folders += 1;
+            }
+
+            return obj;
+          },
+          { files: 0, folders: 0, size: 0 }
+        );
 
         this.$store.commit(types.INC_FILE_COUNTER, counters.files);
         this.$store.commit(types.INC_FOLDER_COUNTER, counters.folders);
         this.$store.commit(types.INC_SIZE_COUNTER, counters.size);
-      } while (cursor && this.isLoading);
+      }
 
       this.loadingMessage = 'Crunching the numbers...';
       await DB.computeAllSize();
 
+      DB.count().then(counter => {
+        if (counter.file) {
+          this.$store.commit(types.INC_FILE_COUNTER, counter.file);
+        }
+        if (counter.folder) {
+          this.$store.commit(types.INC_FOLDER_COUNTER, counter.folder);
+        }
+      });
+
       this.stop();
-    },
-  },
+
+      // Force reload
+      this.cwd = '.';
+      this.cwd = '';
+    }
+  }
 };
 </script>
 

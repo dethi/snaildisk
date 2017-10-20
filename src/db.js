@@ -54,7 +54,32 @@ class DB {
       .where(this.entriesT.path.eq(lf.bind(0)))
       .orderBy(this.entriesT.size, lf.Order.DESC);
 
+    this.deleteQ = this.db
+      .delete()
+      .from(this.entriesT)
+      .where(
+        lf.op.and(
+          this.entriesT.name.eq(lf.bind(0)),
+          this.entriesT.path.eq(lf.bind(1))
+        )
+      );
+
     this.loaded = true;
+  }
+
+  async clear() {
+    return this.db.delete().from(this.entriesT).exec();
+  }
+
+  removeEntries(entries) {
+    const rows = entries.map(e => ({
+      name: e.name.toLowerCase(),
+      path: e.path_lower.substring(0, e.path_lower.lastIndexOf('/'))
+    }));
+
+    return Promise.all(
+      rows.map(({ name, path }) => this.deleteQ.bind([name, path]).exec())
+    );
   }
 
   insertEntries(entries) {
