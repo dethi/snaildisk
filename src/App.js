@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Landing from './Landing';
+import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
+import Auth from './pages/Auth';
+
+const Home = ({ isLogged }) => (
+  <div>{isLogged ? <Dashboard /> : <Landing />}</div>
+);
 
 class App extends Component {
   render() {
     return (
       <Router>
-        <Route exact path="/" component={Landing} />
+        <div>
+          <Route path="/auth" component={Auth} />
+          <Route exact path="/" component={Home} />
+        </div>
       </Router>
     );
   }
