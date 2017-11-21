@@ -1,12 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import 'bulma/css/bulma.css';
 
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import snaildiskApp from './reducers';
+import { setToken } from './actions/auth';
 import { getAndSetAccessToken } from './utils';
+import registerServiceWorker from './registerServiceWorker';
 
-getAndSetAccessToken();
+// Initialize the redux store
+const store = createStore(snaildiskApp);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Get and set the current authentification state
+const token = getAndSetAccessToken();
+store.dispatch(setToken(token));
+
+// Render the app
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+
 registerServiceWorker();
