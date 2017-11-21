@@ -5,6 +5,7 @@
   "dependencies": {
     "bulma": "^0.5.3",
     "dropbox": "^2.5.12",
+    "font-awesome": "^4.7.0",
     "query-string": "^5.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
