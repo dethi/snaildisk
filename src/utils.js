@@ -14,7 +14,8 @@ function getAccessTokenFromLocalStorage() {
 }
 
 export function setAccessToken(token) {
-  localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  // localStorage only accept string type, thus `null` should be converted to an empty string.
+  localStorage.setItem(ACCESS_TOKEN_KEY, token || '');
 }
 
 export function getAndSetAccessToken() {
