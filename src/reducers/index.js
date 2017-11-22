@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 
 import auth from './auth';
 
-const snaildiskApp = combineReducers({
+const snaildiskReducers = combineReducers({
   auth
 });
 
-export default snaildiskApp;
+export default snaildiskReducers;
