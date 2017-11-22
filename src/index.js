@@ -11,8 +11,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import App from './App';
 import snaildiskReducers from './reducers';
 import snaildiskSaga from './sagas';
-import { setToken } from './actions/auth';
-import api from './api';
+import { login } from './actions/auth';
 import { getAndSetAccessToken } from './utils';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -27,10 +26,9 @@ const store = createStore(
 // Run the saga
 sagaMiddleware.run(snaildiskSaga);
 
-// Get and set the current authentification state
+// Get and set the current auth state
 const token = getAndSetAccessToken();
-store.dispatch(setToken(token));
-api.setAccessToken(token);
+store.dispatch(login(token));
 
 // Render the app
 ReactDOM.render(
