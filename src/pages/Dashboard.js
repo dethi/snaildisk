@@ -1,3 +1,15 @@
 import React from 'react';
 
-export default () => <p>Dashboard</p>;
+import Accounts from '../components/Accounts';
+
+function Dashboard() {
+  return (
+    <section className="section">
+      <div className="container">
+        <Accounts />
+      </div>
+    </section>
+  );
+}
+
+export default Dashboard;

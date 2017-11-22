@@ -1,4 +1,4 @@
-import { makeActionCreator } from './helper';
+import { makeActionCreator } from './helpers';
 
 export const FETCH_ACCOUNT_REQUESTED = 'account:fetch_account_requested';
 export const FETCH_ACCOUNT_SUCCEEDED = 'account:fetch_account_succeeded';

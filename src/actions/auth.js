@@ -1,4 +1,4 @@
-import { makeActionCreator } from './helper';
+import { makeActionCreator } from './helpers';
 
 export const LOGIN = 'auth:login';
 export const SET_TOKEN = 'auth:set_token';
