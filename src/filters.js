@@ -12,3 +12,7 @@ export function humanizeSize(bytes) {
   } while (Math.abs(size) >= 1024 && u < units.length - 1);
   return `${size.toFixed(1)} ${units[u]}`;
 }
+
+export function pluralize(n) {
+  return n > 1 ? 's' : '';
+}
