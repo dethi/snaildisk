@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 }
 
 function SpaceUsageView({ usedSize, allocatedSize }) {
-  const spaceUsage = Math.round(usedSize / allocatedSize * 100);
+  const spaceUsage = Math.round(usedSize / allocatedSize * 100) || 0;
 
   return (
     <div>
