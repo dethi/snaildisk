@@ -6,7 +6,7 @@ export default function LoginButton() {
   const authUrl = api.getAuthenticationUrl();
 
   return (
-    <a className="button is-outlined is-info is-large" href={authUrl}>
+    <a className="button is-outlined is-link is-large" href={authUrl}>
       <span className="icon is-medium">
         <i className="fa fa-dropbox" />
       </span>

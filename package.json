@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bulma": "^0.5.3",
+    "bulma": "^0.6.1",
     "dropbox": "^2.5.12",
     "font-awesome": "^4.7.0",
     "query-string": "^5.0.0",
@@ -11,7 +11,7 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.14",
+    "react-scripts": "1.0.17",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0"
   },
